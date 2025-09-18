@@ -19,4 +19,8 @@ public class EntityManageFactoryUtil {
             entitymanagerFactory.close();
         }
     }
+
+//    public static void main(String[] args) {
+//        getEntityManager();
+//    }
 }

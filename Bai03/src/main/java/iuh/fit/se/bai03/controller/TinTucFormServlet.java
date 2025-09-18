@@ -10,8 +10,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 
 import java.io.IOException;
+import java.util.Set;
 
 @WebServlet(name = "tinTucFormController",urlPatterns = {"/form-tin"})
 public class TinTucFormServlet extends HttpServlet {
@@ -36,17 +41,34 @@ public class TinTucFormServlet extends HttpServlet {
         String lienKet=req.getParameter("lienKet");
         int maDM= Integer.parseInt(req.getParameter("maDM"));
 
+
         TinTuc tinTuc=new TinTuc();
+
         tinTuc.setMaTT(maTT);
         tinTuc.setTieuDe(tieuDe);
         tinTuc.setNoiDungTT(noiDung);
         tinTuc.setLienKet(lienKet);
         tinTuc.setMaDM(maDM);
-        System.out.println(tinTuc);
-        danhSachTinTucQuanLy.themTinTuc(tinTuc);
-        session.setAttribute("maDanhMuc",maDM);
-        req.setAttribute("dsTinTuc",danhSachTinTucQuanLy.getTinTucTheoDanhMuc(maDM));
-        req.getRequestDispatcher("/views/tintuc/DanhSachTinTuc.jsp")
-                .forward(req,resp);
+
+        ValidatorFactory validatorFactory= Validation.buildDefaultValidatorFactory();
+        Validator validator=validatorFactory.getValidator();
+
+        Set<ConstraintViolation<TinTuc>> violations=validator.validate(tinTuc);
+
+        if(!violations.isEmpty()){
+           req.setAttribute("errors",violations);
+           req.setAttribute("tinTuc",tinTuc);
+            req.setAttribute("listDanhMuc",danhSachTinTucQuanLy.getAllDanhMuc());
+           req.getRequestDispatcher("/views/form/TinTucForm.jsp")
+                   .forward(req,resp);
+        }else{
+            danhSachTinTucQuanLy.themTinTuc(tinTuc);
+            session.setAttribute("maDanhMuc",maDM);
+            req.setAttribute("dsTinTuc",danhSachTinTucQuanLy.getTinTucTheoDanhMuc(maDM));
+            req.getRequestDispatcher("/views/tintuc/DanhSachTinTuc.jsp")
+                    .forward(req,resp);
+        }
+
+
     }
 }

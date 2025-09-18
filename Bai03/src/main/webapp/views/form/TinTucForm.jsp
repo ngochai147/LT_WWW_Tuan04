@@ -17,22 +17,43 @@
 <form action="form-tin" method="post" style="width: 400px; margin: auto;">
     <div style="margin-bottom: 10px;">
         <label>Mã tin tức (MATT):</label><br>
-        <input type="text" name="maTT" style="width: 100%;" required>
+        <input type="text" name="maTT" value="${tinTuc.maTT}" style="width: 100%;" >
+        <c:forEach var="err" items="${errors}">
+            <c:if test="${err.propertyPath eq 'maTT'}">
+                <span style="color: red">${err.message}</span>
+            </c:if>
+        </c:forEach>
     </div>
 
     <div style="margin-bottom: 10px;">
         <label>Tiêu đề:</label><br>
-        <input type="text" name="tieuDe" style="width: 100%;" required>
+        <input type="text" name="tieuDe" value="${tinTuc.tieuDe}" style="width: 100%;" >
+        <c:forEach var="err" items="${errors}">
+            <c:if test="${err.propertyPath == 'tieuDe'}">
+                <span style="color: red">${err.message}</span>
+            </c:if>
+        </c:forEach>
     </div>
 
     <div style="margin-bottom: 10px;">
         <label>Nội dung:</label><br>
-        <textarea name="noiDungTT" rows="4" style="width: 100%;" required></textarea>
+        <textarea name="noiDungTT" rows="4" style="width: 100%;" value="${tinTuc.noiDungTT}"></textarea>
+        <input type="text" name="tieuDe" value="${tinTuc.tieuDe}" style="width: 100%;" >
+        <c:forEach var="err" items="${errors}">
+            <c:if test="${err.propertyPath == 'noiDungTT'}">
+                <span style="color: red">${err.message}</span>
+            </c:if>
+        </c:forEach>
     </div>
 
     <div style="margin-bottom: 10px;">
         <label>Liên kết:</label><br>
-        <input type="text" name="lienKet" style="width: 100%;">
+        <input type="text" name="lienKet" value="${tinTuc.lienKet}" style="width: 100%;">
+        <c:forEach var="err" items="${errors}">
+            <c:if test="${err.propertyPath == 'lienKet'}">
+                <span style="color: red">${err.message}</span>
+            </c:if>
+        </c:forEach>
     </div>
 
     <div style="margin-bottom: 10px;">
@@ -45,7 +66,7 @@
     </div>
 
     <div style="text-align: center;">
-        <input type="submit"/>Lưu tin tức
+        <input type="submit" value="Lưu tin tức"/>
     </div>
 </form>
 
